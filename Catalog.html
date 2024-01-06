@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catalog</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+          "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+        background-color: #f0f0f0;
+        color: #333;
+        transition: background-color 0.3s, color 0.3s;
+        overflow-x: hidden;
+      }
+
+      .logo {
+        text-align: center;
+        color: #ffffff;
+        font-size: 2rem;
+        padding-left: 20px;
+      }
+
+      nav {
+        background-color: #3498db;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+        justify-content: space-around;
+        margin: 0;
+        padding: 0;
+      }
+
+      .nav-links li {
+        padding: 25px;
+      }
+
+      .nav-links li a {
+        text-decoration: none;
+        color: #fff;
+        transition: color 0.3s;
+        font-size: 1.4rem;
+      }
+
+      .nav-links li a.Catalog {
+        color: #000000;
+      }
+
+      .sidebar {
+        width: 200px;
+        height: 100%;
+        background-color: #07294c;
+        position: fixed;
+        top: 0;
+        left: 0;
+        overflow-y: auto;
+        padding-top: 60px;
+        margin-top: 135px;
+      }
+
+      .sidebar a {
+        padding: 15px;
+        text-decoration: none;
+        color: #ecf0f1;
+        display: block;
+        transition: background-color 0.3s;
+      }
+
+      .sidebar a:hover {
+        background-color: #000000;
+      }
+
+      .content {
+        margin-left: 200px;
+        transition: margin-left 0.3s;
+        max-width: calc(100% - 200px);
+      }
+
+      .new-arrivals-container {
+        margin-top: 150px;
+        padding: 10px;
+        max-width: 100%;
+      }
+
+      .book-card {
+        display: flex;
+        margin-bottom: 20px;
+      }
+
+      .book-card img {
+        width: 100px;
+        height: 150px;
+        margin-right: 20px;
+      }
+
+      .book-info {
+        display: flex;
+        flex-direction: column;
+      }
+      /* Add these styles to your existing styles in the <style> tag or in an external stylesheet */
+      #scrollUpButton {
+        display: none; /* Initially hide the button */
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 10px;
+        background-color: #3498db;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      #scrollUpButton:hover {
+        background-color: #2980b9;
+      }
+    </style>
+  </head>
+  <body onload="showAllBooks()">
+    <header>
+      <nav>
+        <div class="logo">
+          <h1>King..</h1>
+        </div>
+        <ul class="nav-links">
+          <li><a class="home" href="home.html">Home</a></li>
+          <li><a class="Catalog" href="Catalog.html">Catalog</a></li>
+          <li><a class="Contact-us" href="Contact.html">Contact Us</a></li>
+          <li><a class="logout" href="index.html">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="sidebar" id="sidebar">
+      <a href="#" onclick="showAllBooks()">Show All</a>
+      <a href="#" onclick="showNewArrivals()">New Arrivals</a>
+      <a href="#" onclick="showBooks('JavaScript')">JavaScript</a>
+      <a href="#" onclick="showBooks('Python')">Python</a>
+      <a href="#" onclick="showBooks('Java')">Java</a>
+      <a href="#" onclick="showBooks('Web Development')">Web Development</a>
+      <a href="#" onclick="showBooks('Machine Learning')">Machine Learning</a>
+      <a href="#" onclick="showBooks('History')">History</a>
+      <a href="#" onclick="showBooks('Literature')">Literature</a>
+      <a href="#" onclick="showBooks('Programming')">Programming</a>
+      <a href="#" onclick="showBooks('Physics')">Physics</a>
+      <a href="#" onclick="showBooks('Self Development')">Self Development</a>
+    </div>
+
+    <div class="content">
+      <div class="new-arrivals-container" id="booksContainer">
+        <div class="new-arrivals-container"></div>
+      </div>
+    </div>
+    <button id="scrollUpButton" onclick="scrollToTop()">Scroll Up</button>
+
+    <script>
+      window.onload = onPageLoad;
+      function onPageLoad() {
+        showAllBooks();
+      }
+
+      function showNewArrivals() {
+        const booksContainer = document.getElementById("booksContainer");
+        booksContainer.innerHTML = "";
+
+        displayBooks(newArrivals["newBook"]);
+      }
+
+      const newArrivals = {
+        newBook: [
+          {
+            title: "JavaScript the Definitive",
+            author: "David Flanagan",
+            imgSrc:
+              "img/JavaScript-The-Definitive-Guide-by-David-Flanagan-img3.webp",
+          },
+          {
+            title: "read people like book",
+            author: "Patric King",
+            imgSrc: "img/read-people-like-book-img2.jpg",
+          },
+          {
+            title: "control-your-mind-and-master",
+            author: "Eric Roberston",
+            imgSrc: "img/control-your-mind-and-master-img1.jpg",
+          },
+          {
+            title: "As you like it!",
+            author: "William Shakespeare",
+            imgSrc: "img/as-you-like-it.jpeg",
+          },
+          {
+            title: "Othello",
+            author: "William Shakespeare",
+            imgSrc: "img/othello.jpeg",
+          },
+          {
+            title: "Twelfth",
+            author: "William Shakespeare",
+            imgSrc: "img/Twelfth night.jpeg",
+          },
+        ],
+      };
+
+      const categoryBooks = {
+        JavaScript: [
+          {
+            title: "Eloquent JavaScript",
+            author: "Marijn Haverbeke",
+            imgSrc: "img/EloquentJavaScript.webp",
+          },
+          {
+            title: "You Don't Know JS",
+            author: "Kyle Simpson",
+            imgSrc: "img/YouDon'tKnowJS.webp",
+          },
+          {
+            title: "JavaScript: The Definitive Guide",
+            author: "David Flanagan",
+            imgSrc:
+              "img/JavaScript-The-Definitive-Guide-by-David-Flanagan-img3.webp",
+          },
+          {
+            title: "Secrets of the JavaScript Ninja",
+            author: "John Resig",
+            imgSrc: "img/SecretsoftheJavaScriptNinja.webp",
+          },
+          {
+            title: "JavaScript Patterns",
+            author: "Stoyan Stefanov",
+            imgSrc: "img/JavaScriptPatterns.jpg",
+          },
+          {
+            title: "Learning JavaScript Design Patterns",
+            author: "Addy Osmani",
+            imgSrc: "img/LearningJavaScriptDesignPatterns.webp",
+          },
+        ],
+        Python: [
+          {
+            title: "Python Crash Course",
+            author: "Eric Matthes",
+            imgSrc: "img/PythonCrashCourse.jpg",
+          },
+          {
+            title: "Fluent Python",
+            author: "Luciano Ramalho",
+            imgSrc: "img/FluentPython.webp",
+          },
+          {
+            title: "Automate the Boring Stuff with Python",
+            author: "Al Sweigart",
+            imgSrc: "img/AutomatetheBoringStuff withPython.webp",
+          },
+          {
+            title: "Effective Python: 90 Specific Ways to Write Better Python",
+            author: "Brett Slatkin",
+            imgSrc: "img/EffectivePython0SpecificWaystoWriteBetterPython.webp",
+          },
+          {
+            title: "Learning Python",
+            author: "Mark Lutz",
+            imgSrc: "img/LearningPython.webp",
+          },
+          {
+            title: "Python Cookbook",
+            author: "David Beazley",
+            imgSrc: "img/PythonCookbook.webp",
+          },
+        ],
+        Java: [
+          {
+            title: "Effective Java",
+            author: "Joshua Bloch",
+            imgSrc: "img/EffectiveJava.webp",
+          },
+          {
+            title: "Head First Java",
+            author: "Kathy Sierra",
+            imgSrc: "img/HeadFirstJava.webp",
+          },
+          {
+            title: "Java: The Complete Reference",
+            author: "Herbert Schildt",
+            imgSrc: "img/JavaTheCompleteReference.webp",
+          },
+          {
+            title: "Thinking in Java",
+            author: "Bruce Eckel",
+            imgSrc: "img/ThinkinginJava.webp",
+          },
+          {
+            title: "Core Java Volume",
+            author: "Cay S. Horstmann",
+            imgSrc: "img/CoreJavaVolume.jpg",
+          },
+          {
+            title: "Java Concurrency in Practice",
+            author: "Brian Goetz",
+            imgSrc: "img/JavaConcurrencyinPractice.webp",
+          },
+        ],
+        "Web Development": [
+          {
+            title: "HTML and CSS: Design and Build Websites",
+            author: "Jon Duckett",
+            imgSrc: "img/HTMLandCSSDesignandBuildWebsites.webp",
+          },
+          {
+            title: "JavaScript: The Good Parts",
+            author: "Douglas Crockford",
+            imgSrc: "img/JavaScriptTheGoodParts.webp",
+          },
+          {
+            title: "React Up and Running",
+            author: "Stoyan Stefanov",
+            imgSrc: "img/ReactUpandRunning.webp",
+          },
+          {
+            title: "Node.js Design Patterns",
+            author: "Mario Casciaro",
+            imgSrc: "img/NodejsDesignPatterns.webp",
+          },
+          {
+            title: "Fullstack Serverless",
+            author: "Nader Dabit",
+            imgSrc: "img/FullstackServerless.webp",
+          },
+          {
+            title: "Vue.js: Up and Running",
+            author: "Callum Macrae",
+            imgSrc: "img/VuejsUpandRunning.webp",
+          },
+        ],
+        "Machine Learning": [
+          {
+            title: "Hands-On Machine Learning with Scikit-Learn and TensorFlow",
+            author: "Aurélien Géron",
+            imgSrc:
+              "img/HandsOnMachineLearningwithScikitLearnandTensorFlow.webp",
+          },
+          {
+            title: "Pattern Recognition and Machine Learning",
+            author: "Christopher M. Bishop",
+            imgSrc: "img/PatternRecognitionandMachineLearning.jpg",
+          },
+          {
+            title: "Deep Learning",
+            author: "Ian Goodfellow",
+            imgSrc: "img/DeepLearning.webp",
+          },
+          {
+            title: "Python Machine Learning",
+            author: "Sebastian Raschka",
+            imgSrc: "img/PythonMachineLearning.webp",
+          },
+          {
+            title: "Machine Learning Yearning",
+            author: "Andrew Ng",
+            imgSrc: "img/MachineLearningYearning.webp",
+          },
+          {
+            title: "Reinforcement Learning: An Introduction",
+            author: "Richard S. Sutton",
+            imgSrc: "img/ReinforcementLearningAnIntroduction.webp",
+          },
+        ],
+        History: [
+          {
+            title: "A Short History of Nearly Everything",
+            author: "Bill Bryson",
+            imgSrc: "img/AShortHistoryofNearlyEverything.webp",
+          },
+          {
+            title: "The Guns of August",
+            author: "Barbara W. Tuchman",
+            imgSrc: "img/TheGunsofAugust.webp",
+          },
+          {
+            title: "Sapiens: A Brief History of Humankind",
+            author: "Yuval Noah Harari",
+            imgSrc: "img/SapiensABriefHistoryofHumankind.webp",
+          },
+          {
+            title: "The History of the Ancient World",
+            author: "Susan Wise Bauer",
+            imgSrc: "img/TheHistoryoftheAncientWorld.webp",
+          },
+          {
+            title: "1491: New Revelations of the Americas Before Columbus",
+            author: "Charles C. Mann",
+            imgSrc: "img/1491NewRevelationsoftheAmericasBeforeColumbus.webp",
+          },
+          {
+            title: "The Wright Brothers",
+            author: "David McCullough",
+            imgSrc: "img/TheWrightBrothers.webp",
+          },
+        ],
+        Literature: [
+          {
+            title: "To Kill a Mockingbird",
+            author: "Harper Lee",
+            imgSrc: "img/ToKillaMockingbird.webp",
+          },
+          { title: "1984", author: "George Orwell", imgSrc: "img/1984.webp" },
+          {
+            title: "Pride and Prejudice",
+            author: "Jane Austen",
+            imgSrc: "img/PrideandPrejudice.webp",
+          },
+          {
+            title: "The Great Gatsby",
+            author: "F. Scott Fitzgerald",
+            imgSrc: "img/TheGreatGatsby.webp",
+          },
+          {
+            title: "One Hundred Years of Solitude",
+            author: "Gabriel García Márquez",
+            imgSrc: "img/OneHundredYearsofSolitude.webp",
+          },
+          {
+            title: "The Catcher in the Rye",
+            author: "J.D. Salinger",
+            imgSrc: "img/TheCatcherintheRye.webp",
+          },
+        ],
+        Programming: [
+          {
+            title: "Clean Code: A Handbook of Agile Software Craftsmanship",
+            author: "Robert C. Martin",
+            imgSrc: "img/CleanCodeAHandbookofAgileSoftwareCraftsmanship.webp",
+          },
+          {
+            title:
+              "Code Complete: A Practical Handbook of Software Construction",
+            author: "Steve McConnell",
+            imgSrc:
+              "img/CodeCompleteAPracticalHandbookofSoftwareConstruction.webp",
+          },
+          {
+            title: "The Pragmatic Programmer: Your Journey to Mastery",
+            author: "David Thomas",
+            imgSrc: "img/ThePragmaticProgrammerYourJourneytoMastery.webp",
+          },
+          {
+            title:
+              "Design Patterns: Elements of Reusable Object-Oriented Software",
+            author: "Erich Gamma",
+            imgSrc:
+              "img/DesignPatternsElementsofReusableObjectOrientedSoftware.webp",
+          },
+          {
+            title: "Refactoring: Improving the Design of Existing Code",
+            author: "Martin Fowler",
+            imgSrc: "img/RefactoringImprovingtheDesignofExistingCode.webp",
+          },
+          {
+            title:
+              "Code: The Hidden Language of Computer Hardware and Software",
+            author: "Charles Petzold",
+            imgSrc:
+              "img/CodeTheHiddenLanguageofComputerHardwareandSoftware.webp",
+          },
+        ],
+        Physics: [
+          {
+            title: "A Brief History of Time",
+            author: "Stephen Hawking",
+            imgSrc: "img/ABriefHistoryofTime.webp",
+          },
+          {
+            title: "The Elegant Universe",
+            author: "Brian Greene",
+            imgSrc: "img/TheElegantUniverse.webp",
+          },
+          { title: "Cosmos", author: "Carl Sagan", imgSrc: "img/Cosmos.webp" },
+          {
+            title: "Astrophysics for Young People in a Hurry",
+            author: "Neil deGrasse Tyson",
+            imgSrc: "img/AstrophysicsforYoungPeopleinaHurry.webp",
+          },
+          {
+            title: "Seven Brief Lessons on Physics",
+            author: "Carlo Rovelli",
+            imgSrc: "img/SevenBriefLessonsonPhysics.webp",
+          },
+          {
+            title: "Quantum: A Guide for the Perplexed",
+            author: "Jim Al-Khalili",
+            imgSrc: "img/Quantum.webp",
+          },
+        ],
+        "Self Development": [
+          {
+            title: "Atomic Habits",
+            author: "James Clear",
+            imgSrc: "img/AtomicHabits.webp",
+          },
+          {
+            title: "The 7 Habits of Highly Effective People",
+            author: "Stephen R. Covey",
+            imgSrc: "img/The7HabitsofHighlyEffectivePeople.webp",
+          },
+          {
+            title: "How to Win Friends and Influence People",
+            author: "Dale Carnegie",
+            imgSrc: "img/HowtoWinFriendsandInfluencePeople.webp",
+          },
+          {
+            title: "Mindset: The New Psychology of Success",
+            author: "Carol S. Dweck",
+            imgSrc: "img/Mindset.webp",
+          },
+          {
+            title:
+              "The Power of Habit: Why We Do What We Do in Life and Business",
+            author: "Charles Duhigg",
+            imgSrc: "img/ThePowerofHabit.webp",
+          },
+        ],
+      };
+
+      function showAllBooks() {
+        const booksContainer = document.getElementById("booksContainer");
+        booksContainer.innerHTML = "";
+
+        const allBooks = [].concat(
+          newArrivals["newBook"],
+          categoryBooks["JavaScript"],
+          categoryBooks["Python"],
+          categoryBooks["Java"],
+          categoryBooks["Web Development"],
+          categoryBooks["Machine Learning"],
+          categoryBooks["History"],
+          categoryBooks["Literature"],
+          categoryBooks["Programming"],
+          categoryBooks["Physics"],
+          categoryBooks["Self Development"]
+        );
+
+        displayBooks(allBooks);
+      }
+      function showBooks(category) {
+        const booksContainer = document.getElementById("booksContainer");
+        booksContainer.innerHTML = "";
+
+        displayBooks(categoryBooks[category]);
+        displayBooks(newArrivals);
+      }
+
+      function displayBooks(books) {
+        const booksContainer = document.getElementById("booksContainer");
+
+        books.forEach((book) => {
+          const bookCard = document.createElement("div");
+          bookCard.classList.add("book-card");
+
+          const img = document.createElement("img");
+          img.src = book.imgSrc;
+          img.alt = book.title;
+
+          const bookInfo = document.createElement("div");
+          bookInfo.classList.add("book-info");
+
+          const title = document.createElement("h3");
+          title.textContent = book.title;
+
+          const author = document.createElement("p");
+          author.textContent = `Author: ${book.author}`;
+
+          bookInfo.appendChild(title);
+          bookInfo.appendChild(author);
+
+          bookCard.appendChild(img);
+          bookCard.appendChild(bookInfo);
+
+          booksContainer.appendChild(bookCard);
+        });
+      }
+
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const content = document.querySelector(".content");
+
+        if (sidebar.style.left === "0px") {
+          sidebar.style.left = "-200px";
+          content.style.marginLeft = "0";
+        } else {
+          sidebar.style.left = "0";
+          content.style.marginLeft = "200px";
+        }
+      }
+      function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      window.onscroll = function () {
+        const scrollUpButton = document.getElementById("scrollUpButton");
+
+        if (
+          document.body.scrollTop > 20 ||
+          document.documentElement.scrollTop > 20
+        ) {
+          scrollUpButton.style.display = "block";
+        } else {
+          scrollUpButton.style.display = "none";
+        }
+      };
+
+      function saveScrollPosition() {
+        const scrollPosition =
+          window.pageYOffset || document.documentElement.scrollTop;
+        localStorage.setItem("scrollPosition", scrollPosition);
+      }
+
+      function getSavedScrollPosition() {
+        return localStorage.getItem("scrollPosition") || 0;
+      }
+
+      window.addEventListener("beforeunload", saveScrollPosition);
+
+      function onPageLoad() {
+        const savedScrollPosition = getSavedScrollPosition();
+        window.scrollTo(0, savedScrollPosition);
+        showAllBooks();
+      }
+    </script>
+  </body>
+</html>
