@@ -605,41 +605,34 @@
           sidebar.style.left = "0";
           content.style.marginLeft = "200px";
         }
-      }
-      function scrollToTop() {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-
+      }    
       window.onscroll = function () {
-        const scrollUpButton = document.getElementById("scrollUpButton");
+  const scrollUpButton = document.getElementById("scrollUpButton");
 
-        if (
-          document.body.scrollTop > 20 ||
-          document.documentElement.scrollTop > 20
-        ) {
-          scrollUpButton.style.display = "block";
-        } else {
-          scrollUpButton.style.display = "none";
-        }
-      };
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    scrollUpButton.style.display = "block";
+  } else {
+    scrollUpButton.style.display = "none";
+  }
+};
 
-      function saveScrollPosition() {
-        const scrollPosition =
-          window.pageYOffset || document.documentElement.scrollTop;
-        localStorage.setItem("scrollPosition", scrollPosition);
-      }
+function saveScrollPosition() {
+  localStorage.setItem("scrollPosition", window.scrollY);
+}
 
-      function getSavedScrollPosition() {
-        return localStorage.getItem("scrollPosition") || 0;
-      }
+function getSavedScrollPosition() {
+  return parseInt(localStorage.getItem("scrollPosition")) || 0;
+}
 
-      window.addEventListener("beforeunload", saveScrollPosition);
+window.addEventListener("beforeunload", saveScrollPosition);
 
-      function onPageLoad() {
-        const savedScrollPosition = getSavedScrollPosition();
-        window.scrollTo(0, savedScrollPosition);
-        showAllBooks();
-      }
+function onPageLoad() {
+  window.scrollTo(0, getSavedScrollPosition());
+  showAllBooks();
+}
+
+document.addEventListener("DOMContentLoaded", onPageLoad);
+
     </script>
   </body>
 </html>
