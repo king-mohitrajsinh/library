@@ -111,9 +111,7 @@
         display: flex;
         flex-direction: column;
       }
-      /* Add these styles to your existing styles in the <style> tag or in an external stylesheet */
       #scrollUpButton {
-        display: none; /* Initially hide the button */
         position: fixed;
         bottom: 20px;
         right: 20px;
@@ -131,7 +129,7 @@
       }
     </style>
   </head>
-  <body onload="showAllBooks()">
+  <body onload="onPageLoad()">
     <header>
       <nav>
         <div class="logo">
@@ -145,7 +143,7 @@
         </ul>
       </nav>
     </header>
-
+    <!--container--> 
     <div class="sidebar" id="sidebar">
       <a href="#" onclick="showAllBooks()">Show All</a>
       <a href="#" onclick="showNewArrivals()">New Arrivals</a>
@@ -169,18 +167,14 @@
     <button id="scrollUpButton" onclick="scrollToTop()">Scroll Up</button>
 
     <script>
+
+      //----------------------------------------------------onload function------------------------------------------------------------------------------------
       window.onload = onPageLoad;
       function onPageLoad() {
         showAllBooks();
       }
 
-      function showNewArrivals() {
-        const booksContainer = document.getElementById("booksContainer");
-        booksContainer.innerHTML = "";
-
-        displayBooks(newArrivals["newBook"]);
-      }
-
+      //----------------------------------------------------Data------------------------------------------------------------------------------------------------
       const newArrivals = {
         newBook: [
           {
@@ -536,34 +530,63 @@
         ],
       };
 
+
+    
+      //------------------------------------------------------------------ Show all books-----------------------------------------------------------------------
       function showAllBooks() {
         const booksContainer = document.getElementById("booksContainer");
         booksContainer.innerHTML = "";
 
-        const allBooks = [].concat(
-          newArrivals["newBook"],
-          categoryBooks["JavaScript"],
-          categoryBooks["Python"],
-          categoryBooks["Java"],
-          categoryBooks["Web Development"],
-          categoryBooks["Machine Learning"],
-          categoryBooks["History"],
-          categoryBooks["Literature"],
-          categoryBooks["Programming"],
-          categoryBooks["Physics"],
-          categoryBooks["Self Development"]
-        );
-
+        const allBooks = [
+          ...newArrivals["newBook"],
+          ...categoryBooks["JavaScript"],
+          ...categoryBooks["Python"],
+          ...categoryBooks["Java"],
+          ...categoryBooks["Web Development"],
+          ...categoryBooks["Machine Learning"],
+          ...categoryBooks["History"],
+          ...categoryBooks["Literature"],
+          ...categoryBooks["Programming"],
+          ...categoryBooks["Physics"],
+          ...categoryBooks["Self Development"],
+        ];
+        //set item to store the last clicked category
+        sessionStorage.setItem("lastCategory", "allBooks"); // Store the last clicked category
         displayBooks(allBooks);
       }
+
+
+      //------------------------------------------------------------------ Show new arrivals-----------------------------------------------------------------------
+      function showNewArrivals() {
+        const booksContainer = document.getElementById("booksContainer");
+        booksContainer.innerHTML = "";
+
+        displayBooks(newArrivals["newBook"]);
+      }
+
+
+      //------------------------------------------------------------------ Show books by category------------------------------------------------------------------
       function showBooks(category) {
         const booksContainer = document.getElementById("booksContainer");
         booksContainer.innerHTML = "";
 
-        displayBooks(categoryBooks[category]);
-        displayBooks(newArrivals);
+        let booksToDisplay;
+        if (category) {
+          booksToDisplay = categoryBooks[category];
+          sessionStorage.setItem("lastCategory", category); // Store the last clicked category
+        } else {
+          const allBooks = [].concat(
+            newArrivals.newBook,
+            ...Object.values(categoryBooks)
+          );
+          booksToDisplay = allBooks;
+        }
+
+        displayBooks(booksToDisplay);
       }
 
+
+      //------------------------------------------------------------------ Display books----------------------------------------------------------------------------
       function displayBooks(books) {
         const booksContainer = document.getElementById("booksContainer");
 
@@ -594,22 +617,14 @@
         });
       }
 
-      function toggleSidebar() {
-        const sidebar = document.getElementById("sidebar");
-        const content = document.querySelector(".content");
 
-        if (sidebar.style.left === "0px") {
-          sidebar.style.left = "-200px";
-          content.style.marginLeft = "0";
-        } else {
-          sidebar.style.left = "0";
-          content.style.marginLeft = "200px";
-        }
-      }
+      //------------------------------------------------------------------ Scroll to top----------------------------------------------------------------------------
       function scrollToTop() {
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
+
+      //------------------------------------------------------------------ Scroll up button-------------------------------------------------------------------------
       window.onscroll = function () {
         const scrollUpButton = document.getElementById("scrollUpButton");
 
@@ -623,23 +638,53 @@
         }
       };
 
+
+      //------------------------------------------------------------------ Save scroll position---------------------------------------------------------------------
       function saveScrollPosition() {
         const scrollPosition =
           window.pageYOffset || document.documentElement.scrollTop;
         localStorage.setItem("scrollPosition", scrollPosition);
       }
 
+
+      //------------------------------------------------------------------ Get saved scroll position----------------------------------------------------------------
       function getSavedScrollPosition() {
         return localStorage.getItem("scrollPosition") || 0;
       }
 
+
+
+      //------------------------------------------------------------------ Event listeners-------------------------------------------------------------------------
       window.addEventListener("beforeunload", saveScrollPosition);
 
       function onPageLoad() {
         const savedScrollPosition = getSavedScrollPosition();
         window.scrollTo(0, savedScrollPosition);
-        showAllBooks();
+
+        const lastCategory = sessionStorage.getItem("lastCategory");
+
+        if (lastCategory === "allBooks") {
+          showAllBooks();
+        } else {
+          showBooks(lastCategory);
+        }
       }
+
+
+      //---------------------------------------------------------------- Save scroll position on scroll------------------------------------------------------------
+      window.addEventListener("scroll", function () {
+        saveScrollPosition();
+      });
+
+      // -----------------------------------------------------------------Save scroll position on page reload-------------------------------------------------------
+      // Restore scroll position and show books on document ready
+      window.addEventListener("DOMContentLoaded", function () {
+        const savedScrollPosition = getSavedScrollPosition();
+        if (savedScrollPosition !== 0) {
+          window.scrollTo(0, savedScrollPosition);
+        }
+        showBooks();
+      });
     </script>
   </body>
 </html>
