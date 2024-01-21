@@ -135,7 +135,7 @@
     <header>
       <nav>
         <div class="logo">
-          <h1>King</h1>
+          <h1>King..</h1>
         </div>
         <ul class="nav-links">
           <li><a class="home" href="home.html">Home</a></li>
@@ -605,34 +605,41 @@
           sidebar.style.left = "0";
           content.style.marginLeft = "200px";
         }
-      }    
+      }
+      function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
       window.onscroll = function () {
-  const scrollUpButton = document.getElementById("scrollUpButton");
+        const scrollUpButton = document.getElementById("scrollUpButton");
 
-  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-    scrollUpButton.style.display = "block";
-  } else {
-    scrollUpButton.style.display = "none";
-  }
-};
+        if (
+          document.body.scrollTop > 20 ||
+          document.documentElement.scrollTop > 20
+        ) {
+          scrollUpButton.style.display = "block";
+        } else {
+          scrollUpButton.style.display = "none";
+        }
+      };
 
-function saveScrollPosition() {
-  localStorage.setItem("scrollPosition", window.scrollY);
-}
+      function saveScrollPosition() {
+        const scrollPosition =
+          window.pageYOffset || document.documentElement.scrollTop;
+        localStorage.setItem("scrollPosition", scrollPosition);
+      }
 
-function getSavedScrollPosition() {
-  return parseInt(localStorage.getItem("scrollPosition")) || 0;
-}
+      function getSavedScrollPosition() {
+        return localStorage.getItem("scrollPosition") || 0;
+      }
 
-window.addEventListener("beforeunload", saveScrollPosition);
+      window.addEventListener("beforeunload", saveScrollPosition);
 
-function onPageLoad() {
-  window.scrollTo(0, getSavedScrollPosition());
-  showAllBooks();
-}
-
-document.addEventListener("DOMContentLoaded", onPageLoad);
-
+      function onPageLoad() {
+        const savedScrollPosition = getSavedScrollPosition();
+        window.scrollTo(0, savedScrollPosition);
+        showAllBooks();
+      }
     </script>
   </body>
 </html>
